@@ -96,7 +96,7 @@ Also, before diving deep into dereferencing, let's start with an example:
 
 int main() {
     int x = 5;
-    int *pointer_to_x = &5;
+    int *pointer_to_x = &x;
     printf("%p\n", pointer_to_x); // print the address where x is stored
     printf("%d\n", *pointer_to_x); // print out the value at the address. this should be 5
     return 0;
@@ -104,7 +104,26 @@ int main() {
 ```
 The syntax in line 7 of this program is important. We use the `*` unary operator (as mentioned above) to _dereference_ the pointer variable `pointer_to_x` and get its value. But what does _get it's value_ mean. This value is very dependent on the _pointer type_ that is dereferenced. In this above example, the pointer type is `int *` (pointer to an int). When a pointer to an integer is dereferenced, exactly `sizeof(int)` bytes are read from the location that the pointer represents and interpreted as an integer. When a pointer to a character is dereferenced, exactly `sizeof(char)` byes are read from the location that the pointer represents and interpreted as a character. When a pointer to a structure is dereferenced, exactly `sizeof(<struct_type>)` bytes are read from the location that the pointer represents and interpreted as the structure type. Lets visualize this.
 
-Consider [Example 3.1](#example-31). Assume that the variable `pointer_to_x` (a variable of type `int *`) represents the address `0x1fc3de1`. Dereferencing it means "read exactly sizeof(int)" bytes from that location and interpret them as an integer. 
+Consider [Example 3.1](#example-31). Assume that the variable `pointer_to_x` (a variable of type `int *`) represents the address `0x1fc3de1`. Dereferencing it means "read exactly sizeof(int)" bytes from that location and interpret them as an integer. In C, at least on my machine, sizeof(int) == 4. So 4 bytes will be read.
 
-![dereferencing a pointer to an integer](assets/dereference-int-ptr.png "Memory Cells")
+![dereferencing a pointer to an integer](assets/dereference-int-ptr.png "Dereferencing a Pointer to an Integer")
 
+What if `pointer_to_x` was a character pointer? There's no rule in C saying we can't use a pointer type which doesn't match. A pointer is just a location, and any type of pointer can point to any location. We could initialize the variable `pointer_to_x` as a character pointer, a long long pointer, or even a void pointer. There's no rule saying we can't, although many IDEs (such as CLion) will warn you if you're doing this. Let's go through a few of these examples and visualize what happens.
+
+##### Example 3.2
+```C
+#include <stdio.h>
+
+int main() {
+    int x = 5;
+    char *pointer_to_x = &x; // notice that we're initializing a pointer to x (an integer variable) with an incompatible type (a character pointer)
+    printf("%p\n", pointer_to_x); // print the address where x is stored
+    printf("%d\n", *pointer_to_x); // print out the value at the address
+    return 0;
+}
+```
+
+Before looking at the visualization below, try to imagine in your head what is happening in line 7. When the pointer is dereferenced, how many bytes are interpreted, and what type are they interpreted as? Hint: you should carefully inspect line 5. 
+ d
+
+![dereferencing a pointer to a character](assets/dereference-char-ptr.png "Dereferencing a Pointer to a Character")
