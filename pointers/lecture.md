@@ -72,8 +72,16 @@ auto main() -> int {
 }
 ```
 
-#### Initialized vs. Uninitialized Memory
+#### An Aside About Initialized vs. Uninitialized Memory
 
-In [Example 2.1, 2.2, and 2.3](#example-21), 
+In  [Example 1.1](#example-11), the variable `pointer_to_x` is created with the value of `&x`. In [Example 2.1](#example-21), (and also [Example 2.2](#example-22) and [Example 2.3](#example-23)), on the other hand, pointer variables are created but not given a value. We call the variable `pointer_to_x` in [Example 1.1](#example-11) _initialized_ because it has a distinct, known value--the address of the variable `x`. On the other hand, all the variables in [Example 2.1](#example-21) are _uninitialized_ because they are not assigned a value. 
 
+Many programming languages such as Rust do not allow you to (or make it very difficult to) work with uninitialized memory. C and C++, however, have no such qualms. We will discuss uninitialized memory more in the next section. 
 
+#### Dereferencing Pointers
+
+The act of _dereferencing_ a pointer means to _read the value at the address of the pointer_. This _value_ depends on the type of the pointer. To understand what this means, lets first discuss a simplified version of the memory layout of a program and how data is stored.
+
+You can picture memory (for our purposes) as a boundless array of _cells_. Each cell holds exactly one byte. Each cell is addressable. This means that each cell location corresponds to some memory address. Here's an example:
+
+![memory cells](assets/memory-cells.png "Memory Cells")
