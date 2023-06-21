@@ -144,7 +144,7 @@ Again, try visualizing what will happen in line 7 above when `pointer_to_x` is d
 
 ![dereferencing a pointer to a long long](assets/dereference-long-long-ptr.png "Dereferencing a Pointer to a Long Long")
 
-#### A Useful Formula
+##### A Useful Formula
 
 To determine how many bytes will be interpreted from memory when a pointer is dereferenced equals the size of the object to which the pointer is typed as. For example a variable of type `int *` will interpret `sizeof(int)` bytes from the address. A variable of type `long long *`) will interpret `sizeof(long long)` bytes from the address.
 
@@ -153,6 +153,30 @@ Lastly, let's consider if `pointer_to_x` was a pointer to void (type `void *`). 
 #### Void Pointers and Null Pointers
 
 The word void literally means empty, or nothing. In C, when a function is annotated with a return type of `void`, the function literally returns nothing. A pointer to void is actually quite different than this. A pointer of type void is a _generic_ pointer which stores no associated type information. A void pointer can point to any address in memory, just like any other pointer. However, *it cannot be dereferenced*. To _dereference_ a pointer variable of type void, you must first cast it to another pointer type of known size.
+
+##### Example 4.1
+```C
+#include <stdio.h>
+
+int main() {
+    int x = 5;
+    void *pointer_to_x = &x; // we are initializing a pointer containing the location of the first byte of x with a type of void
+    printf("%p\n", pointer_to_x); // print the address where x is stored (same as printing any other address)
+    // the following line will fail! a pointer to void cannot be dereferenced. it must be cast first
+    // printf("%d\n", *pointer_to_x);
+    printf("%d\n", *(int*)pointer_to_x); // casting the void pointer as an int pointer. you can cast a void pointer as anything, so be careful that you're casting it back to the type you want it to be!
+    return 0;
+}
+```
+You should think of a pointer to void as being capable of representing any generic object, at the cost of type safety. A more accurate term for a void pointer would be `any *` or `opaque *`. In Zig, for example, I believe it is called `anyopaque`.  
+
+A null pointer is very different from a void pointer. A null pointer is a memory address that the _operating system deems illegal_ for a user program. A null pointer's implementation details may vary across operating systems, but in general it is a very low address outside of user space. Dereferencing a null pointer leads to a _memory access violation_. This triggers a trap call within the operating system and your program is terminated with a memory segmentation fault (SIGSEGV). 
+
+A null pointer can be useful when initializing pointer values that may not exist yet, for example, the next and previous nodes of a linked list. They have a broad number of use cases that can't fully be covered here. We could assign all the pointers in [Example 2.1](#example-21) to null pointers if we want to be absolutely sure that no one can use them without initialization. 
+
+C contains a macro called `NULL` which corresponds to the platform implementation of a null pointer. On my system, the macro expands to `(void*)0`.
+
+Consider the code in [Example 4.1](#example-41).
 
 ```C
 #include <stdio.h>
@@ -167,8 +191,6 @@ int main() {
     return 0;
 }
 ```
-You should think of a pointer to void as being capable of representing any generic object, at the cost of type safety. A more accurate term for a void pointer would be `any *` or `opaque *`. In Zig, for example, it is called `anyopaque`.  
 
-A null pointer is very different from a void pointer. A null pointer is a memory address that the _operating system deems illegal_ for a user program. A null pointer's implementation details may vary across operating systems, but in general it is a very low address outside of user space. Dereferencing a null pointer leads to a _memory access violation_. This triggers a trap call within the operating system and your program is terminated with a memory segmentation fault (SIGSEGV). 
 
-A null pointer can be useful when initializing pointer values that may not exist yet, for example, the next, and previous nodes of a linked list. They have a broad number of use cases that can't fully be covered here. 
+
