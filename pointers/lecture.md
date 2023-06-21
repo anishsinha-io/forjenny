@@ -176,7 +176,7 @@ A null pointer can be useful when initializing pointer values that may not exist
 
 C contains a macro called `NULL` which corresponds to the platform implementation of a null pointer. On my system, the macro expands to `(void*)0`.
 
-Consider the code in [Example 4.1](#example-41).
+Let's revisit the code in [Example 4.1](#example-41).
 
 ```C
 #include <stdio.h>
@@ -192,5 +192,12 @@ int main() {
 }
 ```
 
+As an exercise, consider what would happen if we changed the cast in line 7 from `(int*)` to some other pointer type like `(char*)`? 
 
+#### Parameter Passing Semantics and Modifying Values Through Pointers
+
+Parameter passing semantics is an important concept to understand before you'll truly appreciate pointers. There are a few different models, but the two most useful are
+
+- Pass by value
+- Pass by reference
 
