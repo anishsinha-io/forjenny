@@ -76,7 +76,7 @@ auto main() -> int {
 
 In  [Example 1.1](#example-11), the variable `pointer_to_x` is created with the value of `&x`. In [Example 2.1](#example-21), (and also [Example 2.2](#example-22) and [Example 2.3](#example-23)), on the other hand, pointer variables are created but not given a value. We call the variable `pointer_to_x` in [Example 1.1](#example-11) _initialized_ because it has a distinct, known value--the address of the variable `x`. On the other hand, all the variables in [Example 2.1](#example-21) are _uninitialized_ because they are not assigned a value. 
 
-Many programming languages such as Rust do not allow you to (or make it very difficult to) work with uninitialized memory. C and C++, however, have no such qualms. We will discuss uninitialized memory more in the next section. 
+Many programming languages such as Java and Rust do not allow you to (or make it very difficult to) work with uninitialized memory. C and C++, however, have no such qualms. We will discuss uninitialized memory more in the next section. 
 
 #### Dereferencing Pointers
 
@@ -102,7 +102,7 @@ int main() {
     return 0;
 }
 ```
-The syntax in line 7 of this program is important. We use the `*` unary operator (as mentioned above) to _dereference_ the pointer variable `pointer_to_x` and get its value. But what does _get it's value_ mean. This value is very dependent on the _pointer type_ that is dereferenced. In this above example, the pointer type is `int *` (pointer to an int). When a pointer to an integer is dereferenced, exactly `sizeof(int)` bytes are read from the location that the pointer represents and interpreted as an integer. When a pointer to a character is dereferenced, exactly `sizeof(char)` byes are read from the location that the pointer represents and interpreted as a character. When a pointer to a structure is dereferenced, exactly `sizeof(<struct_type>)` bytes are read from the location that the pointer represents and interpreted as the structure type. Lets visualize this.
+The syntax in line 7 of this program is important. We use the `*` unary operator (as mentioned above) to _dereference_ the pointer variable `pointer_to_x` and get its value. But what does _get it's value_ mean. This value is very dependent on the _pointer type_ that is dereferenced. In this above example, the pointer type is `int *` (pointer to an int). When a pointer to an integer is dereferenced, exactly `sizeof(int)` bytes are read from the location that the pointer represents and interpreted as an integer. When a pointer to a character is dereferenced, exactly `sizeof(char)` bytes are read from the location that the pointer represents and interpreted as a character. When a pointer to a structure is dereferenced, exactly `sizeof(<struct_type>)` bytes are read from the location that the pointer represents and interpreted as the structure type. Lets visualize this.
 
 Consider [Example 3.1](#example-31). Assume that the variable `pointer_to_x` (a variable of type `int *`) represents the address `0x1fc3de1`. Dereferencing it means "read exactly sizeof(int)" bytes from that location and interpret them as an integer. In C, at least on my machine, sizeof(int) == 4. So 4 bytes will be read.
 
@@ -123,7 +123,23 @@ int main() {
 }
 ```
 
-Before looking at the visualization below, try to imagine in your head what is happening in line 7. When the pointer is dereferenced, how many bytes are interpreted, and what type are they interpreted as? Hint: you should carefully inspect line 5. 
- d
+Now let's consider if `pointer_to_x` was a pointer to a long long (a long long is an 8 byte numeric type). Before looking at the visualization below, try to imagine in your head what is happening in line 7. When the pointer is dereferenced, how many bytes are interpreted, and what type are they interpreted as? Hint: you should carefully inspect line 5. 
 
 ![dereferencing a pointer to a character](assets/dereference-char-ptr.png "Dereferencing a Pointer to a Character")
+
+##### Example 3.3
+```C
+#include <stdio.h>
+
+int main() {
+    int x = 5;
+    long long *pointer_to_x = &x; // notice that we're initializing a pointer to x (an integer variable) with an incompatible type (a long long pointer)
+    printf("%p\n", pointer_to_x); // print the address where x is stored
+    printf("%d\n", *pointer_to_x); // print out the value at the address
+    return 0;
+}
+```
+
+Again, try visualizing what will happen in line 7 above when `pointer_to_x` is dereferenced. How many bytes are interpreted? What are they interpreted as? 
+
+![dereferencing a pointer to a long long](assets/dereference-long-long-ptr.png "Dereferencing a Pointer to a Long Long")
