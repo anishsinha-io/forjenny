@@ -90,6 +90,7 @@ Before we move on, I want to highlight that this memory layout is _big endian_. 
 
 Also, before diving deep into dereferencing, let's start with an example:
 
+##### Example 3.1
 ```C
 #include <stdio.h>
 
@@ -101,5 +102,9 @@ int main() {
     return 0;
 }
 ```
-The syntax in line 7 of this program is important. We use the `*` unary operator (as mentioned above) to _dereference_ the pointer variable `pointer_to_x` and get its value. But what does _get it's value_ mean. This value is very dependent on the _pointer type_ that is dereferenced. In this above example, the pointer type is `int *` (pointer to an int). When a pointer to an integer is dereferenced, exactly `sizeof(int)` bytes are read from the location of that pointer and interpreted as an integer. 
+The syntax in line 7 of this program is important. We use the `*` unary operator (as mentioned above) to _dereference_ the pointer variable `pointer_to_x` and get its value. But what does _get it's value_ mean. This value is very dependent on the _pointer type_ that is dereferenced. In this above example, the pointer type is `int *` (pointer to an int). When a pointer to an integer is dereferenced, exactly `sizeof(int)` bytes are read from the location that the pointer represents and interpreted as an integer. When a pointer to a character is dereferenced, exactly `sizeof(char)` byes are read from the location that the pointer represents and interpreted as a character. When a pointer to a structure is dereferenced, exactly `sizeof(<struct_type>)` bytes are read from the location that the pointer represents and interpreted as the structure type. Lets visualize this.
+
+Consider [Example 3.1](#example-31). Assume that the variable `pointer_to_x` (a variable of type `int *`) represents the address `0x1fc3de1`. Dereferencing it means "read exactly sizeof(int)" bytes from that location and interpret them as an integer. 
+
+![dereferencing a pointer to an integer](assets/dereference-int-ptr.png "Memory Cells")
 
