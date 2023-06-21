@@ -80,8 +80,26 @@ Many programming languages such as Rust do not allow you to (or make it very dif
 
 #### Dereferencing Pointers
 
-The act of _dereferencing_ a pointer means to _read the value at the address of the pointer_. This _value_ depends on the type of the pointer. To understand what this means, lets first discuss a simplified version of the memory layout of a program and how data is stored.
+The act of _dereferencing_ a pointer means to _read the value at the address of the pointer_ using the unary `*` operator. This _value_ depends on the type of the pointer. To understand what this means, lets first discuss a simplified version of the memory layout of a program and how data is stored.
 
-You can picture memory (for our purposes) as a boundless array of _cells_. Each cell holds exactly one byte. Each cell is addressable. This means that each cell location corresponds to some memory address. Here's an example:
+You can picture memory (for our purposes) as a boundless array of _cells_. Each cell holds exactly one byte. Each cell is addressable. This means that each cell location corresponds to some memory address. Here's an example. The first 4 bytes store the integer value 5:
 
 ![memory cells](assets/memory-cells.png "Memory Cells")
+
+Before we move on, I want to highlight that this memory layout is _big endian_. If it were little endian, then then the first 4 bytes would _not_ equal 5. Endianness doesn't matter a whole lot here, but I find big endian slightly easier to read and give examples for.
+
+Also, before diving deep into dereferencing, let's start with an example:
+
+```C
+#include <stdio.h>
+
+int main() {
+    int x = 5;
+    int *pointer_to_x = &5;
+    printf("%p\n", pointer_to_x); // print the address where x is stored
+    printf("%d\n", *pointer_to_x); // print out the value at the address. this should be 5
+    return 0;
+}
+```
+The syntax in line 7 of this program is important. We use the `*` unary operator (as mentioned above) to _dereference_ the pointer variable `pointer_to_x` and get its value. But what does _get it's value_ mean. This value is very dependent on the _pointer type_ that is dereferenced. In this above example, the pointer type is `int *` (pointer to an int). When a pointer to an integer is dereferenced, exactly `sizeof(int)` bytes are read from the location of that pointer and interpreted as an integer. 
+
